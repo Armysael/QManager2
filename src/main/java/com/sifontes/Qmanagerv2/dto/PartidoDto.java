@@ -2,7 +2,7 @@ package com.sifontes.Qmanagerv2.dto;
 
 import com.sifontes.Qmanagerv2.model.Equipo;
 import com.sifontes.Qmanagerv2.model.Partido;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,8 +12,8 @@ public class PartidoDto implements Serializable {
     private String id;
     private String nombre;
 
-    @DBRef
-    private List<Equipo> listaEquipo;
+
+    private List<EquipoDto> listaEquipo;
 
     public PartidoDto() {
     }
@@ -22,7 +22,6 @@ public class PartidoDto implements Serializable {
     public PartidoDto(Partido partido) {
         this.id = partido.getId();
         this.nombre = partido.getNombre();
-        this.listaEquipo = partido.getEquipos();
     }
 
     public String getId() {
@@ -41,11 +40,11 @@ public class PartidoDto implements Serializable {
         this.nombre = nombre;
     }
 
-    public List<Equipo> getListaEquipo() {
+    public List<EquipoDto> getListaEquipo() {
         return listaEquipo;
     }
 
-    public void setListaEquipo(List<Equipo> listaEquipo) {
+    public void setListaEquipo(List<EquipoDto> listaEquipo) {
         this.listaEquipo = listaEquipo;
     }
 }

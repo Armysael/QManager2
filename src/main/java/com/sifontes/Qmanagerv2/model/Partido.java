@@ -1,5 +1,6 @@
 package com.sifontes.Qmanagerv2.model;
 
+import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,18 +23,14 @@ public class Partido {
     public Partido() {
     }
 
-    public Partido(@NotNull String id, String nombre, List<Equipo> equipos) {
-        this.id = id;
-        this.nombre = nombre;
-        this.equipos = equipos;
+    public Partido(PartidoDto partidoDto) {
+        this.id = partidoDto.getId();
+        this.nombre = partidoDto.getNombre();
+
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getNombre() {

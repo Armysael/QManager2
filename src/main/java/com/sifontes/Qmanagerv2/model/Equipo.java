@@ -1,5 +1,6 @@
 package com.sifontes.Qmanagerv2.model;
 
+import com.sifontes.Qmanagerv2.dto.EquipoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotNull;
@@ -16,17 +17,13 @@ public class Equipo {
     public Equipo() {
     }
 
-    public Equipo(@NotNull String id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
+    public Equipo(EquipoDto equipoDto) {
+        this.id = equipoDto.getId();
+        this.nombre = equipoDto.getNombre();
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getNombre() {
