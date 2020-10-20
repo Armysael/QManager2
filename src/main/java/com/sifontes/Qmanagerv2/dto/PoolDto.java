@@ -9,11 +9,14 @@ public class PoolDto implements Serializable {
 
     private String id;
     private String nombre;
-    private List<EquipoDto> listaEquipoDto;
+    private List<EquipoDto> listaEquipo;
 
     public PoolDto(Pool pool) {
         this.id = pool.getId();
         this.nombre = pool.getNombre();
+    }
+
+    public PoolDto() {
     }
 
     public String getId() {
@@ -29,10 +32,10 @@ public class PoolDto implements Serializable {
     }
 
     public List<EquipoDto> getListaEquipo() {
-        return listaEquipoDto;
+        return listaEquipo;
     }
 
     public void setListaEquipo(List<EquipoDto> listaEquipoDto) {
-        this.listaEquipoDto = listaEquipoDto;
+        this.listaEquipo = listaEquipoDto;
     }
 }

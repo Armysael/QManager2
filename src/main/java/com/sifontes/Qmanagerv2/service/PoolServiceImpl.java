@@ -4,7 +4,6 @@ import com.sifontes.Qmanagerv2.configuration.EntityConverter;
 import com.sifontes.Qmanagerv2.dto.EquipoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PoolDto;
-import com.sifontes.Qmanagerv2.model.Equipo;
 import com.sifontes.Qmanagerv2.model.Pool;
 import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PoolRepository;
@@ -33,7 +32,7 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
         List<Pool> poolList = poolRepository.findAll();
         List<PoolDto> poolDtos =new ArrayList<>();
 
-        poolList.stream().forEach(pool -> poolDtos.add(new PoolDto(pool)));
+        poolList.stream().forEach(pool -> poolDtos.add( entityConverter.poolEntitytoDto(pool)));
 
         return poolDtos;
     }
@@ -52,11 +51,11 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
             if(!equipoRepository.existsById(equipoDto.getId())){
                 throw new IllegalArgumentException("Id not found");
             }
-            listaEquiposDto.add(equipoDto);
+            //listaEquiposDto.add(equipoDto);
         }
 
         try {
-            Pool pool = entityConverter.PoolDtoToEntity(elementDto);
+            Pool pool = entityConverter.poolDtoToEntity(elementDto);
 
             poolRepository.insert(pool);
 
@@ -77,7 +76,7 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
 
         Optional<Pool> pool = poolRepository.findById(id);
 
-        return entityConverter.PoolEntitytoDto(pool.get());
+        return entityConverter.poolEntitytoDto(pool.get());
 
     }
 
@@ -85,7 +84,7 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
     public JsonMessage editElement(PoolDto elementDto) {
 
         try {
-            Pool pool = entityConverter.PoolDtoToEntity(elementDto);
+            Pool pool = entityConverter.poolDtoToEntity(elementDto);
             poolRepository.save(pool);
             return new JsonMessage(true,"Equipo editado con éxito");
         }catch (Exception e){

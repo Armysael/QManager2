@@ -1,9 +1,11 @@
 package com.sifontes.Qmanagerv2.configuration;
 
 import com.sifontes.Qmanagerv2.dto.EquipoDto;
+import com.sifontes.Qmanagerv2.dto.EventoDto;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.dto.PoolDto;
 import com.sifontes.Qmanagerv2.model.Equipo;
+import com.sifontes.Qmanagerv2.model.Evento;
 import com.sifontes.Qmanagerv2.model.Partido;
 import com.sifontes.Qmanagerv2.model.Pool;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,7 @@ import java.util.List;
 public class EntityConverter {
 
 
-    public PartidoDto PartidoEntityToDto(Partido partido){
+    public PartidoDto partidoEntityToDto(Partido partido){
 
         PartidoDto partidoDto = new PartidoDto(partido);
         List<EquipoDto> listaEquipoDto = new ArrayList<>();
@@ -28,7 +30,7 @@ public class EntityConverter {
         return partidoDto;
     }
 
-    public Partido PartidoDtoToEntity(PartidoDto partidoDto){
+    public Partido partidoDtoToEntity(PartidoDto partidoDto){
 
         Partido partido = new Partido(partidoDto);
         List<EquipoDto> listaEquipoDto = partidoDto.getListaEquipo();
@@ -41,7 +43,7 @@ public class EntityConverter {
         return partido;
     }
 
-    public Pool PoolDtoToEntity(PoolDto poolDto){
+    public Pool poolDtoToEntity(PoolDto poolDto){
 
         Pool pool = new Pool(poolDto);
 
@@ -55,7 +57,7 @@ public class EntityConverter {
         return pool;
     }
 
-    public PoolDto PoolEntitytoDto(Pool pool){
+    public PoolDto poolEntitytoDto(Pool pool){
 
         PoolDto poolDto = new PoolDto(pool);
         List<EquipoDto> listaEquipoDto = new ArrayList<>();
@@ -67,6 +69,31 @@ public class EntityConverter {
 
         return poolDto;
 
+    }
+    //TODO: Agregar parte de Quiniela
+    public Evento eventoDtoToEntity(EventoDto eventoDto){
+
+        Evento evento = new Evento(eventoDto);
+        List<Partido> listaPartido = new ArrayList<>();
+        List<PartidoDto> listaPartidoDto = eventoDto.getPartidoList();
+
+        listaPartidoDto.stream().forEach(partidoDto -> listaPartido.add(new Partido(partidoDto)));
+
+        evento.setPartidosList(listaPartido);
+
+        return evento;
+    }
+    //TODO: Agregar parte de Quiniela
+    public EventoDto eventoEntityToDto(Evento evento){
+        EventoDto eventoDto = new EventoDto(evento);
+        List<PartidoDto> listaPartidoDto = new ArrayList<>();
+        List<Partido> listaPartido = evento.getPartidosList();
+
+        listaPartido.stream().forEach(partido -> listaPartidoDto.add(new PartidoDto(partido)));
+
+        eventoDto.setPartidoList(listaPartidoDto);
+
+        return eventoDto;
     }
 
 

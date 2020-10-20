@@ -4,7 +4,6 @@ import com.sifontes.Qmanagerv2.configuration.EntityConverter;
 import com.sifontes.Qmanagerv2.dto.EquipoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
-import com.sifontes.Qmanagerv2.model.Equipo;
 import com.sifontes.Qmanagerv2.model.Partido;
 import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
@@ -20,8 +19,6 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
     @Autowired
     PartidoRepository partidoRepository;
 
-    @Autowired
-    EquipoRepository equipoRepository;
 
     @Autowired
     EntityConverter entityConverter;
@@ -33,7 +30,7 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
         List<Partido> listaPartido = partidoRepository.findAll();
         List<PartidoDto> listaPartidoDto = new ArrayList<>();
 
-        listaPartido.stream().forEach( partido -> listaPartidoDto.add(entityConverter.PartidoEntityToDto(partido)));
+        listaPartido.stream().forEach( partido -> listaPartidoDto.add(entityConverter.partidoEntityToDto(partido)));
 
         return listaPartidoDto;
     }
@@ -41,22 +38,22 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
     public JsonMessage addElement(PartidoDto partidoDto){
 
-        List<EquipoDto> listaEquiposDto = new ArrayList<>();
+        //List<EquipoDto> listaEquiposDto = new ArrayList<>();
 
         //TODO:Validar que no juegue el mismo equipo 2 veces
 
 
         //valido que exista el equipo
-        for (EquipoDto equipoDto : partidoDto.getListaEquipo()) {
+     /*   for (EquipoDto equipoDto : partidoDto.getListaEquipo()) {
 
             if(!equipoRepository.existsById(equipoDto.getId())){
                 throw new IllegalArgumentException("Id not found");
             }
             listaEquiposDto.add(equipoDto);
         }
-
+*/
         try {
-            Partido partido = entityConverter.PartidoDtoToEntity(partidoDto);
+            Partido partido = entityConverter.partidoDtoToEntity(partidoDto);
 
             partidoRepository.insert(partido);
 
@@ -77,15 +74,16 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
         Optional<Partido> partido = partidoRepository.findById(id);
 
-        return entityConverter.PartidoEntityToDto(partido.get());
+        return entityConverter.partidoEntityToDto(partido.get());
     }
 
+    //TODO: seguro se puede simplificar edit y add en una sola funcion
     @Override
     public JsonMessage editElement(PartidoDto elementDto) {
 
         try {
 
-            Partido partido = entityConverter.PartidoDtoToEntity(elementDto);
+            Partido partido = entityConverter.partidoDtoToEntity(elementDto);
                     /*
             List<Equipo> listaEquipo = new ArrayList<>();
 
