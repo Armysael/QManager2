@@ -8,9 +8,8 @@ import java.util.List;
 
 public class PartidoDto implements Serializable {
 
-    private String id;
+    private long id;
     private String nombre;
-
     private List<EquipoDto> listaEquipo;
 
     public PartidoDto() {
@@ -21,26 +20,18 @@ public class PartidoDto implements Serializable {
         this.nombre = partido.getNombre();
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public List<EquipoDto> getListaEquipo() {
         return listaEquipo;
     }
-
     public void setListaEquipo(List<EquipoDto> listaEquipo) {
         this.listaEquipo = listaEquipo;
     }
