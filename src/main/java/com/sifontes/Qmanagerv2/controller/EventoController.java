@@ -9,37 +9,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path ="/evento")
+@RequestMapping(path = "/evento")
 public class EventoController {
 
     @Autowired
     EventoServiceImpl eventoService;
 
     @GetMapping("/mostrarEventos")
-    public List<EventoDto> getAllEvents(){
+    public List<EventoDto> getAllEvents() {
         return eventoService.findAllElements();
     }
 
     @GetMapping("/mostrarEventos/{id}")
-    public EventoDto getEventById(@PathVariable(required = true) String id){
+    public EventoDto getEventById(@PathVariable(required = true) long id) {
         return eventoService.findElementById(id);
     }
 
     @CrossOrigin
     @PostMapping("/agregarEvento")
-    public JsonMessage agregarPartido(@RequestBody EventoDto eventoDto){
-
+    public JsonMessage agregarPartido(@RequestBody EventoDto eventoDto) {
         return eventoService.addElement(eventoDto);
     }
 
     @CrossOrigin
     @PutMapping("/mostrarEventos")
-    public JsonMessage editEvento(@RequestBody EventoDto eventoDto){
-        return  eventoService.editElement(eventoDto);
+    public JsonMessage editEvento(@RequestBody EventoDto eventoDto) {
+        return eventoService.editElement(eventoDto);
     }
 
     @DeleteMapping("/mostrarEventos/{id}")
-    public JsonMessage deleteEvento(@PathVariable(required = true) String id){
+    public JsonMessage deleteEvento(@PathVariable(required = true) long id) {
         return eventoService.deleteElement(id);
     }
 }

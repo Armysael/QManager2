@@ -15,31 +15,30 @@ public class EquipoController {
     @Autowired
     EquipoServiceImpl equipoService;
 
-
     @GetMapping(path = "/mostrarEquipos")
-    public List<EquipoDto> getEquipos(){
+    public List<EquipoDto> getEquipos() {
         return equipoService.findAllElements();
     }
 
     @CrossOrigin
     @PostMapping("/agregarEquipo")
-    public JsonMessage agregarEquipo(@RequestBody EquipoDto equipodto){
+    public JsonMessage agregarEquipo(@RequestBody EquipoDto equipodto) {
         return equipoService.addElement(equipodto);
     }
 
     @CrossOrigin
     @PutMapping("/mostrarEquipos")
-    public JsonMessage modificarEquipo(@RequestBody EquipoDto equipodto){
+    public JsonMessage modificarEquipo(@RequestBody EquipoDto equipodto) {
         return equipoService.editElement(equipodto);
     }
 
     @GetMapping(path = "/mostrarEquipos/{id}")
-    public EquipoDto buscarEquipo(@PathVariable(required = true) String id){
+    public EquipoDto buscarEquipo(@PathVariable(required = true) long id) {
         return equipoService.findElementById(id);
     }
 
     @DeleteMapping(path = "/mostrarEquipos/{id}")
-    public JsonMessage borrarEquipo(@PathVariable(required = true) String id){
+    public JsonMessage borrarEquipo(@PathVariable(required = true) long id) {
         return equipoService.deleteElement(id);
     }
 }

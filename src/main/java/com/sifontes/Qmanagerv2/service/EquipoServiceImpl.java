@@ -13,84 +13,87 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EquipoServiceImpl implements CrudInterface<EquipoDto>{
-
+public class EquipoServiceImpl implements CrudInterface<EquipoDto> {
 
     @Autowired
     EquipoRepository equipoRepository;
 
+    @Autowired
+    EntityConverter entityConverter;
 
+    @Autowired
+    SequenceGeneratorService sequenceGenerator;
 
-    public List<EquipoDto> findAllElements(){
+    @Override
+    public List<EquipoDto> findAllElements() {
 
         List<EquipoDto> listaEquipo = new ArrayList<>();
-        List<Equipo> equipo =   equipoRepository.findAll();
+        List<Equipo> equipo = equipoRepository.findAll();
 
-        equipo.stream().forEach(equipo1 -> listaEquipo.add(new EquipoDto(equipo1)));
+        equipo.stream().forEach(equipo1 -> listaEquipo.add(entityConverter.equipoEntityToDto(equipo1)));
         return listaEquipo;
     }
 
-
-    public JsonMessage addElement( EquipoDto equipodto){//TODO: crear engine de auto Id
+    @Override
+    public JsonMessage addElement(EquipoDto equipodto) {
 
         try {
-            Equipo equipo = new Equipo();
-
-            if(findelementByName(equipodto.getNombre())){
-                throw new IllegalArgumentException("equipo con nombre :"+equipodto.getNombre()+" ya existe");
+            if (findelementByName(equipodto.getNombre())) {
+                throw new IllegalArgumentException("equipo con nombre :" + equipodto.getNombre() + " ya existe");
             }
-            equipo.setNombre(equipodto.getNombre());
+
+            Equipo equipo = entityConverter.equipoDtoToEntity(equipodto);
+            equipo.setId(sequenceGenerator.generateSequence(equipo.SEQUENCE_NAME));
             equipoRepository.insert(equipo);
-            return new JsonMessage(true,"Equipo guardado con éxito");
-        }catch (Exception e){
-            return new JsonMessage("Error guardando  equipo:",e);
+
+            return new JsonMessage(true, "Equipo guardado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error guardando  equipo:", e);
         }
     }
 
-    private boolean findelementByName(String name){
+    private boolean findelementByName(String name) {
 
         Equipo equipo = equipoRepository.findByName(name);
 
-        if(equipo != null){
+        if (equipo != null) {
             return true;
         }
-
         return false;
     }
 
-    public EquipoDto findElementById(String id){
+    @Override
+    public EquipoDto findElementById(long id) {
 
-        if(!equipoRepository.existsById(id)) {
+        if (!equipoRepository.existsById(id)) {
             throw new IllegalArgumentException("No existe partido");
         }
 
         Optional<Equipo> equipo = equipoRepository.findById(id);
 
-        return new EquipoDto(equipo.get());
-
+        return entityConverter.equipoEntityToDto(equipo.get());
     }
 
-    public JsonMessage editElement( EquipoDto elementDto){
+    @Override
+    public JsonMessage editElement(EquipoDto elementDto) {
 
         try {
+            Equipo equipo = entityConverter.equipoDtoToEntity(elementDto);
 
-            EquipoDto equipodt = findElementById(elementDto.getId());
-            Equipo equipo =  new Equipo(equipodt);
-            equipo.setNombre(elementDto.getNombre());
             equipoRepository.save(equipo);
-            return new JsonMessage(true,"Equipo editado con éxito");
-        }catch (Exception e){
-            return new JsonMessage("Error editando  equipo:",e);
+            return new JsonMessage(true, "Equipo editado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error editando  equipo:", e);
         }
-
     }
 
-    public JsonMessage deleteElement(String id){
+    @Override
+    public JsonMessage deleteElement(long id) {
         try {
             equipoRepository.deleteById(id);
-            return new JsonMessage(true,"Equipo borrado con éxito");
-        }catch (Exception e){
-            return new JsonMessage("Error borrando equipo:",e);
+            return new JsonMessage(true, "Equipo borrado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error borrando equipo:", e);
         }
     }
 }

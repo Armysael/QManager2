@@ -17,6 +17,10 @@ public class EquipoDto implements Serializable {
         this.nombre = equipo.getNombre();
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

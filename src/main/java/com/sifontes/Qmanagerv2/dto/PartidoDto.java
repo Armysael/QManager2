@@ -11,6 +11,7 @@ public class PartidoDto implements Serializable {
     private long id;
     private String nombre;
     private List<EquipoDto> listaEquipo;
+    private Integer resultado;
 
     public PartidoDto() {
     }
@@ -18,6 +19,18 @@ public class PartidoDto implements Serializable {
     public PartidoDto(Partido partido) {
         this.id = partido.getId();
         this.nombre = partido.getNombre();
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Integer getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(Integer resultado) {
+        this.resultado = resultado;
     }
 
     public long getId() {

@@ -8,7 +8,7 @@ public interface CrudInterface<T> {
 
     List<T> findAllElements();
     JsonMessage addElement(T elementDto);
-    T findElementById(String id);
+    T findElementById(long id);
     JsonMessage editElement( T elementDto);
-    JsonMessage deleteElement( String id);
+    JsonMessage deleteElement( long id);
 }

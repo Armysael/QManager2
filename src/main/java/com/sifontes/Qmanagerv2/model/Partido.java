@@ -5,8 +5,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document
@@ -19,7 +21,10 @@ public class Partido {
     @NotNull
     private long id;
     private String nombre;
+    @DateTimeFormat
+    private LocalDateTime datetime;
     private List<Equipo> equipos;
+    private Integer resultado;
 
     public Partido() {
     }
@@ -28,6 +33,7 @@ public class Partido {
         this.id = partidoDto.getId();
         this.nombre = partidoDto.getNombre();
     }
+
 
     public long getId() {
         return id;
@@ -47,4 +53,6 @@ public class Partido {
     public void setEquipos(List<Equipo> equipos) {
         this.equipos = equipos;
     }
+    public Integer getResultado() {  return resultado; }
+    public void setResultado(Integer resultado) { this.resultado = resultado;}
 }

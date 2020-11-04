@@ -13,7 +13,7 @@ import java.util.List;
 public class Evento {
 
     @Transient
-    public static final String SEQUENCE_NAME="evento_sequence";
+    public static final String SEQUENCE_NAME="evento_sequence";//TODO: agregarle un campo booleano para definir si el evento esta activo o termino
 
     @Id
     @NotNull
@@ -33,9 +33,6 @@ public class Evento {
         return id;
     }
     public void setId(long id) { this.id = id; }
-    public List<Partido> getPartidoList() {
-        return partidoList;
-    }
     public String getNombre() {
         return nombre;
     }

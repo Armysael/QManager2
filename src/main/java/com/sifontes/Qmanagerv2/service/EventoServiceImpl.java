@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EventoServiceImpl implements CrudInterface<EventoDto>{
+public class EventoServiceImpl implements CrudInterface<EventoDto> {
 
     @Autowired
     EventoRepository eventoRepository;
@@ -25,6 +25,9 @@ public class EventoServiceImpl implements CrudInterface<EventoDto>{
 
     @Autowired
     PartidoRepository partidoRepository;
+
+    @Autowired
+    SequenceGeneratorService sequenceGenerator;
 
     @Override
     public List<EventoDto> findAllElements() {
@@ -37,38 +40,32 @@ public class EventoServiceImpl implements CrudInterface<EventoDto>{
     }
 
     @Override
-    public JsonMessage addElement(EventoDto elementDto){
-
-        List<PartidoDto> listaPartidoDto = new ArrayList<>();
-
-        //TODO:Validar que no juegue el mismo equipo 2 veces
-
-
-        //valido que exista los partidos
-        for (PartidoDto partidoDto : elementDto.getPartidoList()) {
-
-            if(!partidoRepository.existsById(partidoDto.getId())){
-                throw new IllegalArgumentException("Id not found");
-            }
-        }
+    public JsonMessage addElement(EventoDto elementDto) {
 
         try {
+            //valido que exista los partidos
+            for (PartidoDto partidoDto : elementDto.getPartidoList()) {
+
+                if (!partidoRepository.existsById(partidoDto.getId())) {
+                    throw new IllegalArgumentException("Id not found");
+                }
+            }
 
             Evento evento = entityConverter.eventoDtoToEntity(elementDto);
-
+            evento.setId(sequenceGenerator.generateSequence(evento.SEQUENCE_NAME));
             eventoRepository.insert(evento);
 
-            return new JsonMessage(true,"Evento guardado con éxito");
-        }catch (Exception e){
+            return new JsonMessage(true, "Evento guardado con éxito");
+        } catch (Exception e) {
 
-            return new JsonMessage("Error guardando Evento:",e);
+            return new JsonMessage("Error guardando Evento:", e);
         }
     }
 
     @Override
-    public EventoDto findElementById(String id) {
+    public EventoDto findElementById(long id) {
 
-        if(!eventoRepository.existsById(id)){
+        if (!eventoRepository.existsById(id)) {
             throw new IllegalArgumentException("No existe Evento");
         }
         Optional<Evento> evento = eventoRepository.findById(id);
@@ -84,21 +81,21 @@ public class EventoServiceImpl implements CrudInterface<EventoDto>{
 
             eventoRepository.save(evento);
 
-            return new JsonMessage(true,"Evento editado con éxito");
-        }catch (Exception e){
+            return new JsonMessage(true, "Evento editado con éxito");
+        } catch (Exception e) {
 
-            return new JsonMessage("Error editando Evento:",e);
+            return new JsonMessage("Error editando Evento:", e);
         }
     }
 
     @Override
-    public JsonMessage deleteElement(String id) {
+    public JsonMessage deleteElement(long id) {
         try {
-        eventoRepository.deleteById(id);
-            return new JsonMessage(true,"Evento borrado con éxito");
-        }catch (Exception e){
+            eventoRepository.deleteById(id);
+            return new JsonMessage(true, "Evento borrado con éxito");
+        } catch (Exception e) {
 
-            return new JsonMessage("Error borrando Evento:",e);
+            return new JsonMessage("Error borrando Evento:", e);
         }
     }
 }

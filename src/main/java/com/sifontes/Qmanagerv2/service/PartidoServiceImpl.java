@@ -7,6 +7,7 @@ import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.model.Partido;
 import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
+import com.sifontes.Qmanagerv2.validation.PartidoValidationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,21 @@ import java.util.Optional;
 
 @Service
 public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
+
     @Autowired
     PartidoRepository partidoRepository;
 
+    @Autowired
+    EquipoRepository equipoRepository;
 
     @Autowired
     EntityConverter entityConverter;
 
+    @Autowired
+    SequenceGeneratorService sequenceGenerator;
+
+    @Autowired
+    PartidoValidationImpl partidoValidation;
 
 
     public List<PartidoDto> findAllElements(){
@@ -38,23 +47,24 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
     public JsonMessage addElement(PartidoDto partidoDto){
 
-        //List<EquipoDto> listaEquiposDto = new ArrayList<>();
 
         //TODO:Validar que no juegue el mismo equipo 2 veces
 
-
         //valido que exista el equipo
-     /*   for (EquipoDto equipoDto : partidoDto.getListaEquipo()) {
-
-            if(!equipoRepository.existsById(equipoDto.getId())){
-                throw new IllegalArgumentException("Id not found");
-            }
-            listaEquiposDto.add(equipoDto);
-        }
-*/
         try {
-            Partido partido = entityConverter.partidoDtoToEntity(partidoDto);
+            for (EquipoDto equipoDto : partidoDto.getListaEquipo()) {
 
+                if(!equipoRepository.existsById(equipoDto.getId())){
+                    throw new IllegalArgumentException("Id not found");
+                }
+            }
+
+            if(!partidoValidation.validateBeforeAdd(partidoDto)){
+                throw new IllegalArgumentException("Duplicated teams");
+            }
+
+            Partido partido = entityConverter.partidoDtoToEntity(partidoDto);
+            partido.setId(sequenceGenerator.generateSequence(partido.SEQUENCE_NAME));
             partidoRepository.insert(partido);
 
             return new JsonMessage(true,"Partido guardada con éxito");
@@ -66,10 +76,10 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
 
     @Override
-    public PartidoDto findElementById(String id) {
+    public PartidoDto findElementById(long id) {
 
         if(!partidoRepository.existsById(id)) {
-            throw new IllegalArgumentException("No existe partido");
+            throw new IllegalArgumentException("No existe Partido");
         }
 
         Optional<Partido> partido = partidoRepository.findById(id);
@@ -77,34 +87,40 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
         return entityConverter.partidoEntityToDto(partido.get());
     }
 
-    //TODO: seguro se puede simplificar edit y add en una sola funcion
     @Override
-    public JsonMessage editElement(PartidoDto elementDto) {
+    public JsonMessage editElement(PartidoDto elementDto) {//TODO: validar  que no este en evento activo
 
         try {
 
+            for (EquipoDto equipoDto : elementDto.getListaEquipo()) {
+
+                if(!equipoRepository.existsById(equipoDto.getId())){
+                    throw new IllegalArgumentException("Id not found");
+                }
+            }
+
+            if(!partidoValidation.validateBeforeAdd(elementDto)){
+                throw new IllegalArgumentException("Duplicated teams");
+            }
+
             Partido partido = entityConverter.partidoDtoToEntity(elementDto);
-                    /*
-            List<Equipo> listaEquipo = new ArrayList<>();
-
-            partido.setNombre(elementDto.getNombre());//TODO: validar lista equipos
-            listaEquipo.addAll(elementDto.getListaEquipo());
-            partido.setEquipos(listaEquipo);*/
-
             partidoRepository.save(partido);
-            return new JsonMessage(true,"Equipo editado con éxito");
+            return new JsonMessage(true,"Partido editado con éxito");
         }catch (Exception e){
-            return new JsonMessage("Error editando  equipo:",e);
+            return new JsonMessage("Error editando  Partido:",e);
         }
     }
 
     @Override
-    public JsonMessage deleteElement(String id) {
+    public JsonMessage deleteElement(long id) {
         try {
+
+            //TODO: validar  que no este en evento activo
+
             partidoRepository.deleteById(id);
             return new JsonMessage(true,"Partido borrado con éxito");
         }catch (Exception e){
-            return new JsonMessage("Error borrando equipo:",e);
+            return new JsonMessage("Error borrando Partido:",e);
         }
     }
 }

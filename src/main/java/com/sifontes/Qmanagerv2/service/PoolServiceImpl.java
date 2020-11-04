@@ -26,13 +26,16 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
     @Autowired
     EntityConverter entityConverter;
 
+    @Autowired
+    SequenceGeneratorService sequenceGenerator;
+
     @Override
     public List<PoolDto> findAllElements() {
 
         List<Pool> poolList = poolRepository.findAll();
-        List<PoolDto> poolDtos =new ArrayList<>();
+        List<PoolDto> poolDtos = new ArrayList<>();
 
-        poolList.stream().forEach(pool -> poolDtos.add( entityConverter.poolEntitytoDto(pool)));
+        poolList.stream().forEach(pool -> poolDtos.add(entityConverter.poolEntitytoDto(pool)));
 
         return poolDtos;
     }
@@ -40,44 +43,35 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
     @Override
     public JsonMessage addElement(PoolDto elementDto) {
 
-        List<EquipoDto> listaEquiposDto = new ArrayList<>();
-
-        //TODO:Validar que no juegue el mismo equipo 2 veces
-
-
-        //valido que exista el equipo
-        for (EquipoDto equipoDto : elementDto.getListaEquipo()) {
-
-            if(!equipoRepository.existsById(equipoDto.getId())){
-                throw new IllegalArgumentException("Id not found");
-            }
-            //listaEquiposDto.add(equipoDto);
-        }
-
         try {
-            Pool pool = entityConverter.poolDtoToEntity(elementDto);
+            //valido que exista el equipo
+            for (EquipoDto equipoDto : elementDto.getListaEquipo()) {
 
+                if (!equipoRepository.existsById(equipoDto.getId())) {
+                    throw new IllegalArgumentException("Id not found");
+                }
+            }
+            Pool pool = entityConverter.poolDtoToEntity(elementDto);
+            pool.setId(sequenceGenerator.generateSequence(pool.SEQUENCE_NAME));
             poolRepository.insert(pool);
 
-            return new JsonMessage(true,"Pool guardado con éxito");
-        }catch (Exception e){
-
-            return new JsonMessage("Error guardando Pool:",e);
+            return new JsonMessage(true, "Pool guardado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error guardando Pool:", e);
         }
-
     }
 
     @Override
-    public PoolDto findElementById(String id) {
+    public PoolDto findElementById(long id) {//TODO: ver como retornar un error en el response
 
-        if(!poolRepository.existsById(id)) {
+        if (!poolRepository.existsById(id)) {
+
             throw new IllegalArgumentException("No existe pool");
         }
 
         Optional<Pool> pool = poolRepository.findById(id);
 
         return entityConverter.poolEntitytoDto(pool.get());
-
     }
 
     @Override
@@ -86,21 +80,20 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
         try {
             Pool pool = entityConverter.poolDtoToEntity(elementDto);
             poolRepository.save(pool);
-            return new JsonMessage(true,"Equipo editado con éxito");
-        }catch (Exception e){
-            return new JsonMessage("Error editando  equipo:",e);
+            return new JsonMessage(true, "Pool editado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error editando  Pool: ", e);
         }
 
     }
 
     @Override
-    public JsonMessage deleteElement(String id) {
+    public JsonMessage deleteElement(long id) {
         try {
             poolRepository.deleteById(id);
-        return new JsonMessage(true,"Equipo editado con éxito");
-    }catch (Exception e){
-        return new JsonMessage("Error editando  equipo:",e);
-    }
-
+            return new JsonMessage(true, "Pool borrado con éxito");
+        } catch (Exception e) {
+            return new JsonMessage("Error borrando el Pool:", e);
+        }
     }
 }

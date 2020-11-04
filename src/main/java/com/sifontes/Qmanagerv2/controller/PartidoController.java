@@ -16,31 +16,29 @@ public class PartidoController {
     PartidoServiceImpl partidoService;
 
     @GetMapping("/mostrarPartidos")
-    public List<PartidoDto> getPartidos(){
+    public List<PartidoDto> getPartidos() {
         return partidoService.findAllElements();
     }
 
     @CrossOrigin
     @PostMapping("/agregarPartido")
-    public JsonMessage agregarPartido(@RequestBody PartidoDto partidoDto){
-
+    public JsonMessage agregarPartido(@RequestBody PartidoDto partidoDto) {
         return partidoService.addElement(partidoDto);
     }
 
     @CrossOrigin
     @PutMapping("/mostrarPartidos")
-    public JsonMessage editPartido(@RequestBody PartidoDto partidoDto){
-
+    public JsonMessage editPartido(@RequestBody PartidoDto partidoDto) {
         return partidoService.editElement(partidoDto);
     }
 
     @GetMapping("/mostrarPartidos/{id}")
-    public PartidoDto getPartidosById(@PathVariable(required = true) String id ){
+    public PartidoDto getPartidosById(@PathVariable(required = true) long id) {
         return partidoService.findElementById(id);
     }
 
     @DeleteMapping("/mostrarPartidos/{id}")
-    public JsonMessage deletePartido(@PathVariable(required = true) String id ){
+    public JsonMessage deletePartido(@PathVariable(required = true) long id) {
         return partidoService.deleteElement(id);
     }
 }
