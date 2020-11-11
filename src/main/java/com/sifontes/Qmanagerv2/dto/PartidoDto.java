@@ -4,6 +4,8 @@ import com.sifontes.Qmanagerv2.model.Partido;
 
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PartidoDto implements Serializable {
@@ -11,6 +13,7 @@ public class PartidoDto implements Serializable {
     private long id;
     private String nombre;
     private List<EquipoDto> listaEquipo;
+    private LocalDateTime dateTime;
     private Integer resultado;
 
     public PartidoDto() {
@@ -19,6 +22,8 @@ public class PartidoDto implements Serializable {
     public PartidoDto(Partido partido) {
         this.id = partido.getId();
         this.nombre = partido.getNombre();
+        this.dateTime = partido.getDateTime();
+
     }
 
     public void setId(long id) {
@@ -46,6 +51,14 @@ public class PartidoDto implements Serializable {
         return listaEquipo;
     }
     public void setListaEquipo(List<EquipoDto> listaEquipo) {
-        this.listaEquipo = listaEquipo;
+        this.listaEquipo = new ArrayList<>(listaEquipo);
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 }

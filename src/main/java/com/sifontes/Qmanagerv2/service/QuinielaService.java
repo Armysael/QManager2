@@ -3,9 +3,7 @@ package com.sifontes.Qmanagerv2.service;
 import com.sifontes.Qmanagerv2.configuration.EntityConverter;
 import com.sifontes.Qmanagerv2.dto.InfoQuinielaPartidoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
-import com.sifontes.Qmanagerv2.dto.PartidoDto;
-import com.sifontes.Qmanagerv2.dto.QuinielaDataDTO;
-import com.sifontes.Qmanagerv2.model.Partido;
+import com.sifontes.Qmanagerv2.dto.QuinielaDTO;
 import com.sifontes.Qmanagerv2.model.Quiniela;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
 import com.sifontes.Qmanagerv2.repository.QuinielaRepository;
@@ -17,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class QuinielaService implements CrudInterface<QuinielaDataDTO>{
+public class QuinielaService implements CrudInterface<QuinielaDTO>{
 
     @Autowired
     QuinielaRepository quinielaRepository;
@@ -34,10 +32,10 @@ public class QuinielaService implements CrudInterface<QuinielaDataDTO>{
 
 
     @Override
-    public List<QuinielaDataDTO> findAllElements() {
+    public List<QuinielaDTO> findAllElements() {
 
         List<Quiniela> listaQuiniela = quinielaRepository.findAll();
-        List<QuinielaDataDTO> listaQuinielaDto = new ArrayList<>();
+        List<QuinielaDTO> listaQuinielaDto = new ArrayList<>();
 
         listaQuiniela.stream().forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
 
@@ -45,7 +43,7 @@ public class QuinielaService implements CrudInterface<QuinielaDataDTO>{
     }
 
     @Override
-    public JsonMessage addElement(QuinielaDataDTO elementDto) {
+    public JsonMessage addElement(QuinielaDTO elementDto) {
 
         try{
 
@@ -70,7 +68,7 @@ public class QuinielaService implements CrudInterface<QuinielaDataDTO>{
     }
 
     @Override
-    public QuinielaDataDTO findElementById(long id) {
+    public QuinielaDTO findElementById(long id) {
 
         if(!quinielaRepository.existsById(id)) {
             throw new IllegalArgumentException("No existe Quiniela");
@@ -82,13 +80,20 @@ public class QuinielaService implements CrudInterface<QuinielaDataDTO>{
 
     }
 
-    public List<Quiniela> findByEvent(long id){
+    public List<QuinielaDTO> findByEvent(long id){
 
-        return quinielaRepository.findByEvent(id);
+        List<Quiniela> quinielaList = quinielaRepository.findByEvent(id);
+
+
+        List<QuinielaDTO> listaQuinielaDto = new ArrayList<>();
+
+        quinielaList.stream().forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
+
+        return listaQuinielaDto;
     }
 
     @Override
-    public JsonMessage editElement(QuinielaDataDTO elementDto) {
+    public JsonMessage editElement(QuinielaDTO elementDto) {
         return null;
     }
 

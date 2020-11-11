@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -42,7 +43,7 @@ public class Pool {
         return listaEquipos;
     }
     public void setListaEquipos(List<Equipo> listaEquipos) {
-        this.listaEquipos = listaEquipos;
+        this.listaEquipos = new ArrayList<>(listaEquipos);
     }
     public void setId(long id) {
         this.id = id;

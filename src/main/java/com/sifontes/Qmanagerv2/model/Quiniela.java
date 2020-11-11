@@ -1,12 +1,13 @@
 package com.sifontes.Qmanagerv2.model;
 
 import com.sifontes.Qmanagerv2.dto.InfoQuinielaPartidoDto;
-import com.sifontes.Qmanagerv2.dto.QuinielaDataDTO;
+import com.sifontes.Qmanagerv2.dto.QuinielaDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -22,19 +23,19 @@ public class Quiniela {
     private String nombreUsuario;
     private String apellidoUsuario;
     private String cedulaUsuario;
-    private long eventId;
+    private long eventoId;
 
     private List<InfoQuinielaPartidoDto> datosPartidoList;
 
     public Quiniela() {
     }
 
-    public Quiniela(QuinielaDataDTO quinielaDataDTO) {
-        this.id = quinielaDataDTO.getId();
-        this.nombreUsuario = quinielaDataDTO.getNombreUsuario();
-        this.apellidoUsuario = quinielaDataDTO.getApellidoUsuario();
-        this.cedulaUsuario = quinielaDataDTO.getCedulaUsuario();
-        this.eventId = quinielaDataDTO.getEventId();
+    public Quiniela(QuinielaDTO quinielaDTO) {
+        this.id = quinielaDTO.getId();
+        this.nombreUsuario = quinielaDTO.getNombreUsuario();
+        this.apellidoUsuario = quinielaDTO.getApellidoUsuario();
+        this.cedulaUsuario = quinielaDTO.getCedulaUsuario();
+        this.eventoId = quinielaDTO.getEventoId();
     }
 
 
@@ -75,14 +76,14 @@ public class Quiniela {
     }
 
     public void setDatosPartidoList(List<InfoQuinielaPartidoDto> datosPartidoList) {
-        this.datosPartidoList = datosPartidoList;
+        this.datosPartidoList = new ArrayList<>(datosPartidoList);
     }
 
-    public long getEventId() {
-        return eventId;
+    public long getEventoId() {
+        return eventoId;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setEventoId(long eventoId) {
+        this.eventoId = eventoId;
     }
 }

@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface QuinielaRepository extends MongoRepository<Quiniela, Serializable> {
 
-    @Query(value = "{'eventId': enventoId}")//TODO: mejorar la query para buscar sin case sensitive
+    @Query(value = "{'eventId': ?0}")
     List<Quiniela> findByEvent(long eventoId);
 }

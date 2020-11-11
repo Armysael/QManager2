@@ -3,6 +3,7 @@ package com.sifontes.Qmanagerv2.dto;
 import com.sifontes.Qmanagerv2.model.Evento;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventoDto implements Serializable {
@@ -32,6 +33,6 @@ public class EventoDto implements Serializable {
         return partidoList;
     }
     public void setPartidoList(List<PartidoDto> partidoList) {
-        this.partidoList = partidoList;
+        this.partidoList = new ArrayList<>(partidoList);
     }
 }

@@ -3,6 +3,7 @@ package com.sifontes.Qmanagerv2.dto;
 import com.sifontes.Qmanagerv2.model.Pool;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PoolDto implements Serializable {
@@ -32,6 +33,6 @@ public class PoolDto implements Serializable {
         return listaEquipo;
     }
     public void setListaEquipo(List<EquipoDto> listaEquipoDto) {
-        this.listaEquipo = listaEquipoDto;
+        this.listaEquipo = new ArrayList<>(listaEquipoDto);
     }
 }

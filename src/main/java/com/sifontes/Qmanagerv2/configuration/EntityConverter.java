@@ -2,8 +2,6 @@ package com.sifontes.Qmanagerv2.configuration;
 
 import com.sifontes.Qmanagerv2.dto.*;
 import com.sifontes.Qmanagerv2.model.*;
-import com.sifontes.Qmanagerv2.service.SequenceGeneratorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -115,23 +113,23 @@ public class EntityConverter {
     }
 
     //TODO: Agregar parte de Quiniela
-    public Quiniela quinielaDtoToEntity(QuinielaDataDTO quinielaDataDTO) {
+    public Quiniela quinielaDtoToEntity(QuinielaDTO quinielaDTO) {
 
-        Quiniela quiniela = new Quiniela(quinielaDataDTO);
+        Quiniela quiniela = new Quiniela(quinielaDTO);
 
-        quiniela.setDatosPartidoList(quinielaDataDTO.getInfoQuinielaPartidoDtos() );
+        quiniela.setDatosPartidoList(quinielaDTO.getInfoQuinielaPartidoDtos() );
 
         return quiniela;
     }
 
     //TODO: desarmar las clases internas que sean lista
-    public QuinielaDataDTO quinielaEntityToDto(Quiniela quiniela) {
+    public QuinielaDTO quinielaEntityToDto(Quiniela quiniela) {
 
-        QuinielaDataDTO quinielaDataDTO = new QuinielaDataDTO(quiniela);
+        QuinielaDTO quinielaDTO = new QuinielaDTO(quiniela);
 
-        quinielaDataDTO.setInfoQuinielaPartidoDtos(quiniela.getDatosPartidoList());
+        quinielaDTO.setInfoQuinielaPartidoDtos(quiniela.getDatosPartidoList());
 
-        return quinielaDataDTO;
+        return quinielaDTO;
     }
 
 

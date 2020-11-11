@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -22,7 +23,7 @@ public class Partido {
     private long id;
     private String nombre;
     @DateTimeFormat
-    private LocalDateTime datetime;
+    private LocalDateTime dateTime;
     private List<Equipo> equipos;
     private Integer resultado;
 
@@ -32,6 +33,7 @@ public class Partido {
     public Partido(PartidoDto partidoDto) {
         this.id = partidoDto.getId();
         this.nombre = partidoDto.getNombre();
+        this.dateTime = partidoDto.getDateTime();
     }
 
 
@@ -51,8 +53,17 @@ public class Partido {
         return equipos;
     }
     public void setEquipos(List<Equipo> equipos) {
-        this.equipos = equipos;
+        this.equipos = new ArrayList<>(equipos);
     }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
     public Integer getResultado() {  return resultado; }
     public void setResultado(Integer resultado) { this.resultado = resultado;}
 }

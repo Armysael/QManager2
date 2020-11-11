@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -43,6 +44,6 @@ public class Evento {
         return partidoList;
     }
     public void setPartidosList(List<Partido> partidosList) {
-        this.partidoList = partidosList;
+        this.partidoList = new ArrayList<>(partidosList);
     }
 }

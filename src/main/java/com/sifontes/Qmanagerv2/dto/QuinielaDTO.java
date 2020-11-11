@@ -2,34 +2,35 @@ package com.sifontes.Qmanagerv2.dto;
 
 import com.sifontes.Qmanagerv2.model.Quiniela;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class QuinielaDataDTO {
+public class QuinielaDTO {
 
     private long id;
     private String nombreUsuario;
     private String apellidoUsuario;
     private String cedulaUsuario;
-    private long eventId;
+    private long eventoId;
     private List<InfoQuinielaPartidoDto> infoQuinielaPartidoDtos;
 
-    public QuinielaDataDTO() {
+    public QuinielaDTO() {
     }
 
-    public QuinielaDataDTO(long id, String nombreUsuario, String apellidoUsuario, String cedulaUsuario, long eventId) {
+    public QuinielaDTO(long id, String nombreUsuario, String apellidoUsuario, String cedulaUsuario, long eventoId) {
         this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.apellidoUsuario = apellidoUsuario;
         this.cedulaUsuario = cedulaUsuario;
-        this.eventId = eventId;
+        this.eventoId = eventoId;
     }
 
-    public QuinielaDataDTO(Quiniela quiniela) {
+    public QuinielaDTO(Quiniela quiniela) {
         this.id = quiniela.getId();
         this.nombreUsuario = quiniela.getNombreUsuario();
         this.apellidoUsuario = quiniela.getApellidoUsuario();
         this.cedulaUsuario = quiniela.getCedulaUsuario();
-        this.eventId = quiniela.getEventId();
+        this.eventoId = quiniela.getEventoId();
     }
 
     public long getId() {
@@ -69,14 +70,14 @@ public class QuinielaDataDTO {
     }
 
     public void setInfoQuinielaPartidoDtos(List<InfoQuinielaPartidoDto> infoQuinielaPartidoDtos) {
-        this.infoQuinielaPartidoDtos = infoQuinielaPartidoDtos;
+        this.infoQuinielaPartidoDtos =  new ArrayList<>(infoQuinielaPartidoDtos);
     }
 
-    public long getEventId() {
-        return eventId;
+    public long getEventoId() {
+        return eventoId;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setEventoId(long eventoId) {
+        this.eventoId = eventoId;
     }
 }
