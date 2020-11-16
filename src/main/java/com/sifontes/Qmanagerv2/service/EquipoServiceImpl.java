@@ -52,6 +52,15 @@ public class EquipoServiceImpl implements CrudInterface<EquipoDto> {
         }
     }
 
+    public void addBulkElements(List<EquipoDto> equipoDtoList){
+
+        for (EquipoDto equipoDto: equipoDtoList) {
+
+                addElement(equipoDto);
+            }
+
+    }
+
     private boolean findelementByName(String name) {
 
         Equipo equipo = equipoRepository.findByName(name);

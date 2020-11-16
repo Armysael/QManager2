@@ -7,6 +7,9 @@ import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.model.Evento;
 import com.sifontes.Qmanagerv2.repository.EventoRepository;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
+import com.sifontes.Qmanagerv2.utils.CustomMessages;
+import com.sifontes.Qmanagerv2.utils.EnumAcciones;
+import com.sifontes.Qmanagerv2.utils.EnumEntidades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,9 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
 
     @Autowired
     SequenceGeneratorService sequenceGenerator;
+
+    @Autowired
+    CustomMessages customMessages;
 
     @Override
     public List<EventoDto> findAllElements() {
@@ -55,10 +61,9 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
             evento.setId(sequenceGenerator.generateSequence(evento.SEQUENCE_NAME));
             eventoRepository.insert(evento);
 
-            return new JsonMessage(true, "Evento guardado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.SAVE);
         } catch (Exception e) {
-
-            return new JsonMessage("Error guardando Evento:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.EVENTO, EnumAcciones.SAVE, e);
         }
     }
 
@@ -81,10 +86,9 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
 
             eventoRepository.save(evento);
 
-            return new JsonMessage(true, "Evento editado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.EDIT);
         } catch (Exception e) {
-
-            return new JsonMessage("Error editando Evento:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.EVENTO, EnumAcciones.EDIT, e);
         }
     }
 
@@ -92,10 +96,9 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
     public JsonMessage deleteElement(long id) {
         try {
             eventoRepository.deleteById(id);
-            return new JsonMessage(true, "Evento borrado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.DELETE);
         } catch (Exception e) {
-
-            return new JsonMessage("Error borrando Evento:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.EVENTO, EnumAcciones.DELETE, e);
         }
     }
 }

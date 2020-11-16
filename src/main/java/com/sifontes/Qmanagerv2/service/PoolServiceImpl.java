@@ -7,6 +7,9 @@ import com.sifontes.Qmanagerv2.dto.PoolDto;
 import com.sifontes.Qmanagerv2.model.Pool;
 import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PoolRepository;
+import com.sifontes.Qmanagerv2.utils.CustomMessages;
+import com.sifontes.Qmanagerv2.utils.EnumAcciones;
+import com.sifontes.Qmanagerv2.utils.EnumEntidades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,9 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
 
     @Autowired
     SequenceGeneratorService sequenceGenerator;
+
+    @Autowired
+    CustomMessages customMessages;
 
     @Override
     public List<PoolDto> findAllElements() {
@@ -55,9 +61,9 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
             pool.setId(sequenceGenerator.generateSequence(pool.SEQUENCE_NAME));
             poolRepository.insert(pool);
 
-            return new JsonMessage(true, "Pool guardado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.POOL, EnumAcciones.SAVE);
         } catch (Exception e) {
-            return new JsonMessage("Error guardando Pool:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.POOL, EnumAcciones.SAVE, e);
         }
     }
 
@@ -80,9 +86,9 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
         try {
             Pool pool = entityConverter.poolDtoToEntity(elementDto);
             poolRepository.save(pool);
-            return new JsonMessage(true, "Pool editado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.POOL, EnumAcciones.EDIT);
         } catch (Exception e) {
-            return new JsonMessage("Error editando  Pool: ", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.POOL, EnumAcciones.EDIT, e);
         }
 
     }
@@ -91,9 +97,9 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
     public JsonMessage deleteElement(long id) {
         try {
             poolRepository.deleteById(id);
-            return new JsonMessage(true, "Pool borrado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.POOL, EnumAcciones.DELETE);
         } catch (Exception e) {
-            return new JsonMessage("Error borrando el Pool:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.POOL, EnumAcciones.DELETE, e);
         }
     }
 }

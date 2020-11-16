@@ -7,6 +7,9 @@ import com.sifontes.Qmanagerv2.dto.QuinielaDTO;
 import com.sifontes.Qmanagerv2.model.Quiniela;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
 import com.sifontes.Qmanagerv2.repository.QuinielaRepository;
+import com.sifontes.Qmanagerv2.utils.CustomMessages;
+import com.sifontes.Qmanagerv2.utils.EnumAcciones;
+import com.sifontes.Qmanagerv2.utils.EnumEntidades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,10 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
 
     @Autowired
     SequenceGeneratorService sequenceGenerator;
+
+    @Autowired
+    CustomMessages customMessages;
+
 
 
 
@@ -59,10 +66,9 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
               quiniela.setId(sequenceGenerator.generateSequence(quiniela.SEQUENCE_NAME));
               quinielaRepository.insert(quiniela);
 
-        return new JsonMessage(true,"Quiniela guardada con éxito");
-    }catch (Exception e){
-
-        return new JsonMessage("Error guardando Quiniela:",e);
+            return customMessages.getActionSuccessMessage(EnumEntidades.QUINIELA, EnumAcciones.SAVE);
+        } catch (Exception e) {
+            return customMessages.getActionErrorMessage(EnumEntidades.QUINIELA, EnumAcciones.SAVE, e);
     }
 
     }
@@ -101,9 +107,9 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
     public JsonMessage deleteElement(long id) {
         try {
             quinielaRepository.deleteById(id);
-            return new JsonMessage(true, "Quiniela borrado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.QUINIELA, EnumAcciones.DELETE);
         } catch (Exception e) {
-            return new JsonMessage("Error borrando Quiniela:", e);
+            return customMessages.getActionErrorMessage(EnumEntidades.QUINIELA, EnumAcciones.DELETE, e);
         }
     }
 }

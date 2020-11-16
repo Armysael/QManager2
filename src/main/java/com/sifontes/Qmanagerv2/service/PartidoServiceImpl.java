@@ -4,17 +4,17 @@ import com.sifontes.Qmanagerv2.configuration.EntityConverter;
 import com.sifontes.Qmanagerv2.dto.EquipoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
-import com.sifontes.Qmanagerv2.model.Equipo;
 import com.sifontes.Qmanagerv2.model.Partido;
 import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;
+import com.sifontes.Qmanagerv2.utils.CustomMessages;
+import com.sifontes.Qmanagerv2.utils.EnumAcciones;
+import com.sifontes.Qmanagerv2.utils.EnumEntidades;
 import com.sifontes.Qmanagerv2.validation.PartidoValidationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
@@ -34,6 +34,9 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
     @Autowired
     PartidoValidationImpl partidoValidation;
 
+    @Autowired
+    CustomMessages customMessages;
+
 
     public List<PartidoDto> findAllElements(){
 
@@ -48,36 +51,28 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
     public JsonMessage addElement(PartidoDto partidoDto){
 
-     //   List<EquipoDto> listaEquipo = new ArrayList<>();
-        //TODO:Validar que no juegue el mismo equipo 2 veces
-
+        Set<EquipoDto> set = new HashSet<>();
         //valido que exista el equipo
         try {
             for (EquipoDto equipoDto : partidoDto.getListaEquipo()) {
 
                 if(!equipoRepository.existsById(equipoDto.getId())){
                     throw new IllegalArgumentException("Id not found");
-                }/*else{
-                    Optional<Equipo> byId = equipoRepository.findById(equipoDto.getId());
-                    EquipoDto dto = entityConverter.equipoEntityToDto(byId.get());
-                    listaEquipo.add(dto);
-                }*/
+                }
             }
 
             if(!partidoValidation.validateBeforeAdd(partidoDto)){
                 throw new IllegalArgumentException("Duplicated teams");
             }
 
-        //    partidoDto.setListaEquipo(listaEquipo);
-            partidoDto.setDateTime(java.time.LocalDateTime.now());//TODO: esto se va a pasar por parametro eventualmente
             Partido partido = entityConverter.partidoDtoToEntity(partidoDto);
             partido.setId(sequenceGenerator.generateSequence(partido.SEQUENCE_NAME));
             partidoRepository.insert(partido);
 
-            return new JsonMessage(true,"Partido guardada con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.PARTIDO, EnumAcciones.SAVE);
         }catch (Exception e){
 
-            return new JsonMessage("Error guardando Partido:",e);
+            return customMessages.getActionErrorMessage(EnumEntidades.PARTIDO, EnumAcciones.SAVE, e);
         }
     }
 
@@ -112,9 +107,9 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
 
             Partido partido = entityConverter.partidoDtoToEntity(elementDto);
             partidoRepository.save(partido);
-            return new JsonMessage(true,"Partido editado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.PARTIDO, EnumAcciones.EDIT);
         }catch (Exception e){
-            return new JsonMessage("Error editando  Partido:",e);
+            return customMessages.getActionErrorMessage(EnumEntidades.PARTIDO, EnumAcciones.EDIT, e);
         }
     }
 
@@ -125,9 +120,9 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
             //TODO: validar  que no este en evento activo
 
             partidoRepository.deleteById(id);
-            return new JsonMessage(true,"Partido borrado con éxito");
+            return customMessages.getActionSuccessMessage(EnumEntidades.PARTIDO, EnumAcciones.DELETE);
         }catch (Exception e){
-            return new JsonMessage("Error borrando Partido:",e);
+            return customMessages.getActionErrorMessage(EnumEntidades.PARTIDO, EnumAcciones.DELETE, e);
         }
     }
 }
