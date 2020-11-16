@@ -1,6 +1,8 @@
 package com.sifontes.Qmanagerv2.dto;
 
 import com.sifontes.Qmanagerv2.model.Evento;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,5 +36,31 @@ public class EventoDto implements Serializable {
     }
     public void setPartidoList(List<PartidoDto> partidoList) {
         this.partidoList = new ArrayList<>(partidoList);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                        append(id).
+                        append(nombre).
+                        append(partidoList).
+                        toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof EventoDto))
+            return false;
+        if (obj == this)
+            return true;
+
+        EventoDto rhs = (EventoDto) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                        append(id, rhs.id).
+                        append(nombre, rhs.nombre).
+                        append(partidoList, rhs.partidoList).
+                        isEquals();
     }
 }
