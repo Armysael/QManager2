@@ -2,6 +2,8 @@ package com.sifontes.Qmanagerv2.model;
 
 import com.sifontes.Qmanagerv2.dto.InfoQuinielaPartidoDto;
 import com.sifontes.Qmanagerv2.dto.QuinielaDTO;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -85,5 +87,37 @@ public class Quiniela {
 
     public void setEventoId(long eventoId) {
         this.eventoId = eventoId;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                        append(id).
+                        append(nombreUsuario).
+                        append(apellidoUsuario).
+                        append(cedulaUsuario).
+                        append(eventoId).
+                        append(datosPartidoList).
+                        toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Quiniela))
+            return false;
+        if (obj == this)
+            return true;
+
+        Quiniela rhs = (Quiniela) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                        append(id, rhs.id).
+                        append(nombreUsuario, rhs.nombreUsuario).
+                        append(apellidoUsuario, rhs.apellidoUsuario).
+                        append(cedulaUsuario, rhs.cedulaUsuario).
+                        append(eventoId, rhs.eventoId).
+                        append(datosPartidoList, rhs.datosPartidoList).
+                        isEquals();
     }
 }

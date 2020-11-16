@@ -90,7 +90,7 @@ public class QuinielaDTO {
                         append(id).
                         append(nombreUsuario).
                         append(apellidoUsuario).
-                        append(apellidoUsuario).
+                        append(cedulaUsuario).
                         append(eventoId).
                         append(infoQuinielaPartidoDtos).
                         toHashCode();
@@ -109,6 +109,7 @@ public class QuinielaDTO {
                         append(id, rhs.id).
                         append(nombreUsuario, rhs.nombreUsuario).
                         append(apellidoUsuario, rhs.apellidoUsuario).
+                        append(cedulaUsuario, rhs.cedulaUsuario).
                         append(eventoId, rhs.eventoId).
                         append(infoQuinielaPartidoDtos, rhs.infoQuinielaPartidoDtos).
                         isEquals();

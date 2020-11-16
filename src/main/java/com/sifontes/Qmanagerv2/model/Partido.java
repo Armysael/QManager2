@@ -3,7 +3,8 @@ package com.sifontes.Qmanagerv2.model;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -66,4 +67,35 @@ public class Partido {
 
     public Integer getResultado() {  return resultado; }
     public void setResultado(Integer resultado) { this.resultado = resultado;}
+
+    @Override
+    public int hashCode() {
+
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                        append(id).
+                        append(nombre).
+                        append(dateTime).
+                        append(equipos).
+                        append(resultado).
+                        toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Partido))
+            return false;
+        if (obj == this)
+            return true;
+
+        Partido rhs = (Partido) obj;
+        return new EqualsBuilder().
+                // if deriving: appendSuper(super.equals(obj)).
+                        append(id, rhs.id).
+                        append(nombre, rhs.nombre).
+                        append(dateTime, rhs.dateTime).
+                        append(equipos, rhs.equipos).
+                        append(resultado, rhs.resultado).
+                        isEquals();
+    }
 }
