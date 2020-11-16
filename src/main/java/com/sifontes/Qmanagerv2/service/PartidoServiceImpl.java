@@ -69,7 +69,7 @@ public class PartidoServiceImpl implements CrudInterface<PartidoDto>{
             }
 
         //    partidoDto.setListaEquipo(listaEquipo);
-            partidoDto.setDateTime(java.time.LocalDateTime.now());
+            partidoDto.setDateTime(java.time.LocalDateTime.now());//TODO: esto se va a pasar por parametro eventualmente
             Partido partido = entityConverter.partidoDtoToEntity(partidoDto);
             partido.setId(sequenceGenerator.generateSequence(partido.SEQUENCE_NAME));
             partidoRepository.insert(partido);

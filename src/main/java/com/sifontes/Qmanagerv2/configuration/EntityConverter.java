@@ -84,6 +84,7 @@ public class EntityConverter {
 
     }
 
+
     //TODO: Agregar parte de Quiniela
     public Evento eventoDtoToEntity(EventoDto eventoDto) {
 

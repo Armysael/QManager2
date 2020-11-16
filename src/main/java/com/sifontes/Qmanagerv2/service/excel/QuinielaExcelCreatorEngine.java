@@ -39,52 +39,7 @@ public class QuinielaExcelCreatorEngine {
 
     private final static String[] titulosTest ={"Id","Fecha","Grupo","Partido","Resultado"};
 
-    private  List<PartidoDto> initData(){
-
-        EquipoDto equipoDto1 = new EquipoDto();
-        equipoDto1.setId(1);
-        equipoDto1.setNombre("Argentina");
-
-        EquipoDto equipoDto2 = new EquipoDto();
-        equipoDto2.setId(2);
-        equipoDto2.setNombre("Brasil");
-
-        EquipoDto equipoDto3 = new EquipoDto();
-        equipoDto3.setId(3);
-        equipoDto3.setNombre("Ecuador");
-
-        EquipoDto equipoDto4 = new EquipoDto();
-        equipoDto4.setId(4);
-        equipoDto4.setNombre("Venezuela");
-
-        List<EquipoDto> lista1 = new ArrayList<>();
-        lista1.add(equipoDto1);
-        lista1.add(equipoDto2);
-
-        List<EquipoDto> lista2 = new ArrayList<>();
-        lista2.add(equipoDto3);
-        lista2.add(equipoDto4);
-
-        PartidoDto partidoDto= new PartidoDto();
-        partidoDto.setId(1);
-        partidoDto.setNombre("ARG-BRA");
-        partidoDto.setListaEquipo(lista1);
-
-        PartidoDto partidoDto2= new PartidoDto();
-        partidoDto2.setId(2);
-        partidoDto2.setNombre("ECU-VZA");
-        partidoDto2.setListaEquipo(lista2);
-
-        List<PartidoDto> partidoList = new ArrayList<>();
-
-        partidoList.add(partidoDto);
-        partidoList.add(partidoDto2);
-
-        return partidoList;
-    }
-
     public void constructExcel(String type,EventoDto eventoDto){
-
 
         List<PartidoDto> partidoDtoListCompleto = new ArrayList<>();
         List<EquipoDto> listaEquipoCompleto = new ArrayList<>();
@@ -162,7 +117,8 @@ public class QuinielaExcelCreatorEngine {
 
     private void createExcelFile(Workbook wb, String fileName) throws FileNotFoundException, IOException {
         // Write the output to a file
-        String file = fileName+".xls";
+
+        String file = fileName.toLowerCase().replaceAll(" ","_")+".xls";
         if (wb instanceof XSSFWorkbook) file += "x";
         FileOutputStream out = null;
         out = new FileOutputStream(file);
@@ -262,6 +218,7 @@ public class QuinielaExcelCreatorEngine {
         apellidoCellValue.setCellStyle(styles.get("cellUnlocked"));
         cedulaCellValue.setCellStyle(styles.get("cellUnlocked"));
 
+        eventoCellValue.setCellValue("1");
         eventoCell.setCellValue("Evento ID");
         nombreCell.setCellValue("Nombre");
         apellidoCell.setCellValue("Apellido");
