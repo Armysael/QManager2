@@ -27,6 +27,10 @@ public class EquipoController {
     }
 
     @CrossOrigin
+    @PostMapping("/agregarEquipoBulk")
+    public void agregarEquipoBulk(@RequestBody List<EquipoDto> listEquipoDto){  equipoService.addBulkElements(listEquipoDto);}
+
+    @CrossOrigin
     @PutMapping("/mostrarEquipos")
     public JsonMessage modificarEquipo(@RequestBody EquipoDto equipodto) {
         return equipoService.editElement(equipodto);
