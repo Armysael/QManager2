@@ -12,8 +12,13 @@ import java.util.List;
 @RequestMapping(path = "/quiniela")
 public class QuinielaController {
 
+
+    private final QuinielaService quinielaService;
+
     @Autowired
-    QuinielaService quinielaService;
+    public QuinielaController(QuinielaService quinielaService) {
+        this.quinielaService = quinielaService;
+    }
 
     @CrossOrigin
     @PostMapping("/addQuiniela")
@@ -22,18 +27,18 @@ public class QuinielaController {
     }
 
     @GetMapping("/getQuinielaEvent/{id}")
-    public List<QuinielaDTO> buscarQuinielaPorEvento(@PathVariable(required = true) long id ){
+    public List<QuinielaDTO> buscarQuinielaPorEvento(@PathVariable long id ){
         return quinielaService.findByEvent(id);
     }
 
     @GetMapping("/getQuiniela/{id}")
-    public QuinielaDTO buscarQuiniela(@PathVariable(required = true) long id ){
+    public QuinielaDTO buscarQuiniela(@PathVariable long id ){
         return quinielaService.findElementById(id);
     }
 
     @CrossOrigin
     @DeleteMapping("/getQuiniela/{id}")
-    public JsonMessage borrarQuiniela(@PathVariable(required = true) long id ){
+    public JsonMessage borrarQuiniela(@PathVariable long id ){
         return quinielaService.deleteElement(id);
     }
 }

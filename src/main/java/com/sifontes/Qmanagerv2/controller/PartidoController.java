@@ -12,8 +12,12 @@ import java.util.List;
 @RequestMapping(path = "/partido")
 public class PartidoController {
 
+    private final PartidoServiceImpl partidoService;
+
     @Autowired
-    PartidoServiceImpl partidoService;
+    public PartidoController(PartidoServiceImpl partidoService) {
+        this.partidoService = partidoService;
+    }
 
     @GetMapping("/mostrarPartidos")
     public List<PartidoDto> getPartidos() {
@@ -33,12 +37,12 @@ public class PartidoController {
     }
 
     @GetMapping("/mostrarPartidos/{id}")
-    public PartidoDto getPartidosById(@PathVariable(required = true) long id) {
+    public PartidoDto getPartidosById(@PathVariable long id) {
         return partidoService.findElementById(id);
     }
 
     @DeleteMapping("/mostrarPartidos/{id}")
-    public JsonMessage deletePartido(@PathVariable(required = true) long id) {
+    public JsonMessage deletePartido(@PathVariable long id) {
         return partidoService.deleteElement(id);
     }
 }

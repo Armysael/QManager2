@@ -12,8 +12,13 @@ import java.util.List;
 @RequestMapping(path = "/pool")
 public class PoolController {
 
+
+    private final PoolServiceImpl poolService;
+
     @Autowired
-    PoolServiceImpl poolService;
+    public PoolController(PoolServiceImpl poolService) {
+        this.poolService = poolService;
+    }
 
     @GetMapping("/mostrarPool")
     public List<PoolDto> getPool() {
@@ -21,7 +26,7 @@ public class PoolController {
     }
 
     @GetMapping("/mostrarPool/{id}")
-    public PoolDto getPool(@PathVariable(required = true) long id) {
+    public PoolDto getPool(@PathVariable long id) {
         return poolService.findElementById(id);
     }
 
@@ -38,7 +43,7 @@ public class PoolController {
     }
 
     @DeleteMapping("/mostrarPool/{id}")
-    public JsonMessage removePool(@PathVariable(required = true) long id) {
+    public JsonMessage removePool(@PathVariable long id) {
         return poolService.deleteElement(id);
     }
 }

@@ -12,8 +12,12 @@ import java.util.List;
 @RequestMapping(path = "/evento")
 public class EventoController {
 
+    private final EventoServiceImpl eventoService;
+
     @Autowired
-    EventoServiceImpl eventoService;
+    public EventoController(EventoServiceImpl eventoService) {
+        this.eventoService = eventoService;
+    }
 
     @GetMapping("/mostrarEventos")
     public List<EventoDto> getAllEvents() {
@@ -21,7 +25,7 @@ public class EventoController {
     }
 
     @GetMapping("/mostrarEventos/{id}")
-    public EventoDto getEventById(@PathVariable(required = true) long id) {
+    public EventoDto getEventById(@PathVariable long id) {
         return eventoService.findElementById(id);
     }
 
@@ -38,7 +42,7 @@ public class EventoController {
     }
 
     @DeleteMapping("/mostrarEventos/{id}")
-    public JsonMessage deleteEvento(@PathVariable(required = true) long id) {
+    public JsonMessage deleteEvento(@PathVariable long id) {
         return eventoService.deleteElement(id);
     }
 }

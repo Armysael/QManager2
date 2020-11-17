@@ -12,8 +12,12 @@ import java.util.List;
 @RequestMapping(path = "/equipo")
 public class EquipoController {
 
+    private final EquipoServiceImpl equipoService;
+
     @Autowired
-    EquipoServiceImpl equipoService;
+    public EquipoController(EquipoServiceImpl equipoService) {
+        this.equipoService = equipoService;
+    }
 
     @GetMapping(path = "/mostrarEquipos")
     public List<EquipoDto> getEquipos() {
@@ -37,12 +41,12 @@ public class EquipoController {
     }
 
     @GetMapping(path = "/mostrarEquipos/{id}")
-    public EquipoDto buscarEquipo(@PathVariable(required = true) long id) {
+    public EquipoDto buscarEquipo(@PathVariable long id) {
         return equipoService.findElementById(id);
     }
 
     @DeleteMapping(path = "/mostrarEquipos/{id}")
-    public JsonMessage borrarEquipo(@PathVariable(required = true) long id) {
+    public JsonMessage borrarEquipo(@PathVariable long id) {
         return equipoService.deleteElement(id);
     }
 }
