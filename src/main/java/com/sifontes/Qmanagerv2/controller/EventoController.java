@@ -2,6 +2,7 @@ package com.sifontes.Qmanagerv2.controller;
 
 import com.sifontes.Qmanagerv2.dto.EventoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.service.EventoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +32,16 @@ public class EventoController {
 
     @CrossOrigin
     @PostMapping("/agregarEvento")
-    public JsonMessage agregarPartido(@RequestBody EventoDto eventoDto) {
+    public JsonMessage agregarEvento(@RequestBody EventoDto eventoDto) {
         return eventoService.addElement(eventoDto);
     }
+
+    @CrossOrigin
+    @PostMapping("/agregarPartidosEvento")
+    public JsonMessage agregarPartidoEvento(@RequestBody EventoDto eventoDto, @RequestBody List<PartidoDto> listPartido) {
+        return eventoService.addMatchToEvent(eventoDto,listPartido);
+    }
+
 
     @CrossOrigin
     @PutMapping("/mostrarEventos")

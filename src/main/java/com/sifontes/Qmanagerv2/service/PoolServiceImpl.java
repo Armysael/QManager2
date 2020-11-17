@@ -1,11 +1,9 @@
 package com.sifontes.Qmanagerv2.service;
 
 import com.sifontes.Qmanagerv2.configuration.EntityConverter;
-import com.sifontes.Qmanagerv2.dto.EquipoDto;
 import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PoolDto;
 import com.sifontes.Qmanagerv2.model.Pool;
-import com.sifontes.Qmanagerv2.repository.EquipoRepository;
 import com.sifontes.Qmanagerv2.repository.PoolRepository;
 import com.sifontes.Qmanagerv2.utils.CustomMessages;
 import com.sifontes.Qmanagerv2.utils.EnumAcciones;
@@ -20,20 +18,16 @@ import java.util.Optional;
 @Service
 public class PoolServiceImpl implements CrudInterface<PoolDto> {
 
-    @Autowired
-    PoolRepository poolRepository;
+    private final PoolRepository poolRepository;
+    private final EntityConverter entityConverter;
+    private final SequenceGeneratorService sequenceGenerator;
 
     @Autowired
-    EquipoRepository equipoRepository;
-
-    @Autowired
-    EntityConverter entityConverter;
-
-    @Autowired
-    SequenceGeneratorService sequenceGenerator;
-
-    @Autowired
-    CustomMessages customMessages;
+    public PoolServiceImpl(PoolRepository poolRepository, EntityConverter entityConverter, SequenceGeneratorService sequenceGenerator) {
+        this.poolRepository = poolRepository;
+        this.entityConverter = entityConverter;
+        this.sequenceGenerator = sequenceGenerator;
+    }
 
     @Override
     public List<PoolDto> findAllElements() {
@@ -41,7 +35,7 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
         List<Pool> poolList = poolRepository.findAll();
         List<PoolDto> poolDtos = new ArrayList<>();
 
-        poolList.stream().forEach(pool -> poolDtos.add(entityConverter.poolEntitytoDto(pool)));
+        poolList.forEach(pool -> poolDtos.add(entityConverter.poolEntitytoDto(pool)));
 
         return poolDtos;
     }
@@ -49,16 +43,17 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
     @Override
     public JsonMessage addElement(PoolDto elementDto) {
 
+        CustomMessages customMessages = new CustomMessages();
         try {
             //valido que exista el equipo
-            for (EquipoDto equipoDto : elementDto.getListaEquipo()) {
+            /*for (EquipoDto equipoDto : elementDto.getListaEquipo()) {
 
                 if (!equipoRepository.existsById(equipoDto.getId())) {
                     throw new IllegalArgumentException("Id not found");
                 }
-            }
+            }*/
             Pool pool = entityConverter.poolDtoToEntity(elementDto);
-            pool.setId(sequenceGenerator.generateSequence(pool.SEQUENCE_NAME));
+            pool.setId(sequenceGenerator.generateSequence(Pool.SEQUENCE_NAME));
             poolRepository.insert(pool);
 
             return customMessages.getActionSuccessMessage(EnumEntidades.POOL, EnumAcciones.SAVE);
@@ -69,19 +64,18 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
 
     @Override
     public PoolDto findElementById(long id) {//TODO: ver como retornar un error en el response
-
-        if (!poolRepository.existsById(id)) {
-
-            throw new IllegalArgumentException("No existe pool");
-        }
-
         Optional<Pool> pool = poolRepository.findById(id);
-
-        return entityConverter.poolEntitytoDto(pool.get());
+        if (!pool.isPresent()) {
+            throw new IllegalArgumentException("No existe pool");
+        }else{
+            return entityConverter.poolEntitytoDto(pool.get());
+        }
     }
 
     @Override
     public JsonMessage editElement(PoolDto elementDto) {
+
+        CustomMessages customMessages = new CustomMessages();
 
         try {
             Pool pool = entityConverter.poolDtoToEntity(elementDto);
@@ -95,6 +89,7 @@ public class PoolServiceImpl implements CrudInterface<PoolDto> {
 
     @Override
     public JsonMessage deleteElement(long id) {
+        CustomMessages customMessages = new CustomMessages();
         try {
             poolRepository.deleteById(id);
             return customMessages.getActionSuccessMessage(EnumEntidades.POOL, EnumAcciones.DELETE);

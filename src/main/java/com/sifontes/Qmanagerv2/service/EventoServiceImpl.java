@@ -6,7 +6,6 @@ import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.model.Evento;
 import com.sifontes.Qmanagerv2.repository.EventoRepository;
-import com.sifontes.Qmanagerv2.repository.PartidoRepository;
 import com.sifontes.Qmanagerv2.utils.CustomMessages;
 import com.sifontes.Qmanagerv2.utils.EnumAcciones;
 import com.sifontes.Qmanagerv2.utils.EnumEntidades;
@@ -20,46 +19,47 @@ import java.util.Optional;
 @Service
 public class EventoServiceImpl implements CrudInterface<EventoDto> {
 
-    @Autowired
-    EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
+    private final EntityConverter entityConverter;
+    private final SequenceGeneratorService sequenceGenerator;
 
     @Autowired
-    EntityConverter entityConverter;
-
-    @Autowired
-    PartidoRepository partidoRepository;
-
-    @Autowired
-    SequenceGeneratorService sequenceGenerator;
-
-    @Autowired
-    CustomMessages customMessages;
+    public EventoServiceImpl(EventoRepository eventoRepository, EntityConverter entityConverter, SequenceGeneratorService sequenceGenerator) {
+        this.eventoRepository = eventoRepository;
+        this.entityConverter = entityConverter;
+        this.sequenceGenerator = sequenceGenerator;
+    }
 
     @Override
     public List<EventoDto> findAllElements() {
 
-        List<Evento> listaEventos = eventoRepository.findAll();
         List<EventoDto> listaEventosDto = new ArrayList<>();
-
-        listaEventos.stream().forEach(evento -> listaEventosDto.add(entityConverter.eventoEntityToDto(evento)));
+        eventoRepository.findAll().forEach(evento -> listaEventosDto.add(entityConverter.eventoEntityToDto(evento)));
         return listaEventosDto;
     }
 
     @Override
     public JsonMessage addElement(EventoDto elementDto) {
 
+        CustomMessages customMessages = new CustomMessages();
         try {
-            //valido que exista los partidos
-            for (PartidoDto partidoDto : elementDto.getPartidoList()) {
-
-                if (!partidoRepository.existsById(partidoDto.getId())) {
-                    throw new IllegalArgumentException("Id not found");
-                }
-            }
-
             Evento evento = entityConverter.eventoDtoToEntity(elementDto);
-            evento.setId(sequenceGenerator.generateSequence(evento.SEQUENCE_NAME));
+            evento.setId(sequenceGenerator.generateSequence(Evento.SEQUENCE_NAME));
             eventoRepository.insert(evento);
+
+            return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.SAVE);
+        } catch (Exception e) {
+            return customMessages.getActionErrorMessage(EnumEntidades.EVENTO, EnumAcciones.SAVE, e);
+        }
+    }
+
+    public JsonMessage addMatchToEvent(EventoDto eventoDto,List<PartidoDto> listaPartido){
+
+        CustomMessages customMessages = new CustomMessages();
+        try{
+            EventoDto evento = findElementById(eventoDto.getId());
+            evento.setPartidoList(listaPartido);
+            editElement(evento);
 
             return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.SAVE);
         } catch (Exception e) {
@@ -70,17 +70,17 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
     @Override
     public EventoDto findElementById(long id) {
 
-        if (!eventoRepository.existsById(id)) {
+        Optional<Evento> evento = eventoRepository.findById(id);
+        if (!evento.isPresent()) {
             throw new IllegalArgumentException("No existe Evento");
         }
-        Optional<Evento> evento = eventoRepository.findById(id);
-
         return entityConverter.eventoEntityToDto(evento.get());
     }
 
     @Override
     public JsonMessage editElement(EventoDto elementDto) {
 
+        CustomMessages customMessages = new CustomMessages();
         try {
             Evento evento = entityConverter.eventoDtoToEntity(elementDto);
 
@@ -94,6 +94,7 @@ public class EventoServiceImpl implements CrudInterface<EventoDto> {
 
     @Override
     public JsonMessage deleteElement(long id) {
+        CustomMessages customMessages = new CustomMessages();
         try {
             eventoRepository.deleteById(id);
             return customMessages.getActionSuccessMessage(EnumEntidades.EVENTO, EnumAcciones.DELETE);

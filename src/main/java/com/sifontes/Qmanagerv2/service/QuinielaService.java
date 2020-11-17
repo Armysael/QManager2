@@ -20,31 +20,23 @@ import java.util.Optional;
 @Service
 public class QuinielaService implements CrudInterface<QuinielaDTO>{
 
-    @Autowired
-    QuinielaRepository quinielaRepository;
+    private final QuinielaRepository quinielaRepository;
+    private final EntityConverter entityConverter;
+    private final SequenceGeneratorService sequenceGenerator;
 
     @Autowired
-    PartidoRepository partidoRepository;
-
-    @Autowired
-    EntityConverter entityConverter;
-
-    @Autowired
-    SequenceGeneratorService sequenceGenerator;
-
-    @Autowired
-    CustomMessages customMessages;
-
-
-
+    public QuinielaService(QuinielaRepository quinielaRepository, EntityConverter entityConverter, SequenceGeneratorService sequenceGenerator) {
+        this.quinielaRepository = quinielaRepository;
+        this.entityConverter = entityConverter;
+        this.sequenceGenerator = sequenceGenerator;
+    }
 
     @Override
     public List<QuinielaDTO> findAllElements() {
 
         List<Quiniela> listaQuiniela = quinielaRepository.findAll();
         List<QuinielaDTO> listaQuinielaDto = new ArrayList<>();
-
-        listaQuiniela.stream().forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
+        listaQuiniela.forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
 
         return listaQuinielaDto;
     }
@@ -52,18 +44,19 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
     @Override
     public JsonMessage addElement(QuinielaDTO elementDto) {
 
+        CustomMessages customMessages = new CustomMessages();
+
         try{
 
-            for (InfoQuinielaPartidoDto infoPartido : elementDto.getInfoQuinielaPartidoDtos()) {
+      /*      for (InfoQuinielaPartidoDto infoPartido : elementDto.getInfoQuinielaPartidoDtos()) {
 
                 if (!partidoRepository.existsById(infoPartido.getPartidoId())) {
                     throw new IllegalArgumentException("Id not found");
                 }
-            }
-            //TODO:Validar partido duplicado
+            }*/
 
               Quiniela quiniela = entityConverter.quinielaDtoToEntity(elementDto);
-              quiniela.setId(sequenceGenerator.generateSequence(quiniela.SEQUENCE_NAME));
+              quiniela.setId(sequenceGenerator.generateSequence(Quiniela.SEQUENCE_NAME));
               quinielaRepository.insert(quiniela);
 
             return customMessages.getActionSuccessMessage(EnumEntidades.QUINIELA, EnumAcciones.SAVE);
@@ -76,24 +69,19 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
     @Override
     public QuinielaDTO findElementById(long id) {
 
-        if(!quinielaRepository.existsById(id)) {
+        Optional<Quiniela> quiniela = quinielaRepository.findById(id);
+        if(!quiniela.isPresent()) {
             throw new IllegalArgumentException("No existe Quiniela");
         }
-
-        Optional<Quiniela> quiniela = quinielaRepository.findById(id);
-
         return entityConverter.quinielaEntityToDto(quiniela.get());
-
     }
 
     public List<QuinielaDTO> findByEvent(long id){
 
         List<Quiniela> quinielaList = quinielaRepository.findByEvent(id);
-
-
         List<QuinielaDTO> listaQuinielaDto = new ArrayList<>();
 
-        quinielaList.stream().forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
+        quinielaList.forEach( quiniela -> listaQuinielaDto.add(entityConverter.quinielaEntityToDto(quiniela)));
 
         return listaQuinielaDto;
     }
@@ -101,10 +89,11 @@ public class QuinielaService implements CrudInterface<QuinielaDTO>{
     @Override
     public JsonMessage editElement(QuinielaDTO elementDto) {
         return null;
-    }
+    }//TODO: probablemente no implementar interfaz para esta entidad
 
     @Override
     public JsonMessage deleteElement(long id) {
+        CustomMessages customMessages = new CustomMessages();
         try {
             quinielaRepository.deleteById(id);
             return customMessages.getActionSuccessMessage(EnumEntidades.QUINIELA, EnumAcciones.DELETE);
