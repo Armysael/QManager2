@@ -1,7 +1,6 @@
 package com.sifontes.Qmanagerv2.dto;
 
 import com.sifontes.Qmanagerv2.model.Equipo;
-import com.sifontes.Qmanagerv2.model.Partido;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
