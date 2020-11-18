@@ -10,10 +10,6 @@ import java.util.List;
 @Component
 public class EntityConverter {
 
-    //@Autowired
-    // SequenceGeneratorService sequenceGenerator;
-
-
     public EquipoDto equipoEntityToDto(Equipo equipo) {
 
         return new EquipoDto(equipo);
@@ -21,11 +17,7 @@ public class EntityConverter {
 
     public Equipo equipoDtoToEntity(EquipoDto equipoDto) {
 
-        Equipo equipo = new Equipo(equipoDto);
-
-        //    equipo.setId(sequenceGenerator.generateSequence(equipo.SEQUENCE_NAME));
-
-        return equipo;
+        return  new Equipo(equipoDto);
     }
 
     public PartidoDto partidoEntityToDto(Partido partido) {
@@ -34,7 +26,7 @@ public class EntityConverter {
         List<EquipoDto> listaEquipoDto = new ArrayList<>();
         List<Equipo> listaEquipos = partido.getEquipos();
 
-        listaEquipos.stream().forEach(equipo -> listaEquipoDto.add(new EquipoDto(equipo)));
+        listaEquipos.forEach(equipo -> listaEquipoDto.add(new EquipoDto(equipo)));
 
         partidoDto.setListaEquipo(listaEquipoDto);
 
@@ -47,9 +39,8 @@ public class EntityConverter {
         List<EquipoDto> listaEquipoDto = partidoDto.getListaEquipo();
         List<Equipo> listaEquipos = new ArrayList<>();
 
-        listaEquipoDto.stream().forEach(equipoDto -> listaEquipos.add(new Equipo(equipoDto)));
+        listaEquipoDto.forEach(equipoDto -> listaEquipos.add(new Equipo(equipoDto)));
 
-        //  partido.setId(sequenceGenerator.generateSequence(partido.SEQUENCE_NAME));
         partido.setEquipos(listaEquipos);
 
         return partido;
@@ -62,9 +53,8 @@ public class EntityConverter {
         List<EquipoDto> listaEquipoDto = poolDto.getListaEquipo();
         List<Equipo> listaEquipo = new ArrayList<>();
 
-        listaEquipoDto.stream().forEach(equipoDto -> listaEquipo.add(new Equipo(equipoDto)));
+        listaEquipoDto.forEach(equipoDto -> listaEquipo.add(new Equipo(equipoDto)));
 
-        //   pool.setId(sequenceGenerator.generateSequence(Pool.SEQUENCE_NAME));
         pool.setListaEquipos(listaEquipo);
 
         return pool;
@@ -76,44 +66,38 @@ public class EntityConverter {
         List<EquipoDto> listaEquipoDto = new ArrayList<>();
         List<Equipo> listaEquipos = pool.getListaEquipos();
 
-        listaEquipos.stream().forEach(equipo -> listaEquipoDto.add(new EquipoDto(equipo)));
+        listaEquipos.forEach(equipo -> listaEquipoDto.add(new EquipoDto(equipo)));
 
         poolDto.setListaEquipo(listaEquipoDto);
 
         return poolDto;
-
     }
 
-
-    //TODO: Agregar parte de Quiniela
     public Evento eventoDtoToEntity(EventoDto eventoDto) {
 
         Evento evento = new Evento(eventoDto);
         List<Partido> listaPartido = new ArrayList<>();
         List<PartidoDto> listaPartidoDto = eventoDto.getPartidoList();
 
-        listaPartidoDto.stream().forEach(partidoDto -> listaPartido.add(new Partido(partidoDto)));
+        listaPartidoDto.forEach(partidoDto -> listaPartido.add(new Partido(partidoDto)));
 
-        //  evento.setId(sequenceGenerator.generateSequence(evento.SEQUENCE_NAME));
         evento.setPartidosList(listaPartido);
 
         return evento;
     }
 
-    //TODO: Agregar parte de Quiniela
     public EventoDto eventoEntityToDto(Evento evento) {
         EventoDto eventoDto = new EventoDto(evento);
         List<PartidoDto> listaPartidoDto = new ArrayList<>();
         List<Partido> listaPartido = evento.getPartidosList();
 
-        listaPartido.stream().forEach(partido -> listaPartidoDto.add(new PartidoDto(partido)));
+        listaPartido.forEach(partido -> listaPartidoDto.add(new PartidoDto(partido)));
 
         eventoDto.setPartidoList(listaPartidoDto);
 
         return eventoDto;
     }
 
-    //TODO: Agregar parte de Quiniela
     public Quiniela quinielaDtoToEntity(QuinielaDTO quinielaDTO) {
 
         Quiniela quiniela = new Quiniela(quinielaDTO);
@@ -123,7 +107,6 @@ public class EntityConverter {
         return quiniela;
     }
 
-    //TODO: desarmar las clases internas que sean lista
     public QuinielaDTO quinielaEntityToDto(Quiniela quiniela) {
 
         QuinielaDTO quinielaDTO = new QuinielaDTO(quiniela);

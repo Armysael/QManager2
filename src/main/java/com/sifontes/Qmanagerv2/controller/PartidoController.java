@@ -1,6 +1,6 @@
 package com.sifontes.Qmanagerv2.controller;
 
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.utils.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.service.PartidoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

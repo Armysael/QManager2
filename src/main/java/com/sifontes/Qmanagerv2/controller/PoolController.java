@@ -1,6 +1,6 @@
 package com.sifontes.Qmanagerv2.controller;
 
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.utils.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PoolDto;
 import com.sifontes.Qmanagerv2.service.PoolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

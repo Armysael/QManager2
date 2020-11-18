@@ -1,6 +1,5 @@
 package com.sifontes.Qmanagerv2.utils;
 
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
 import org.springframework.stereotype.Component;
 
 @Component

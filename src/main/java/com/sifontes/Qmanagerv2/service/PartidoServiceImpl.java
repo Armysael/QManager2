@@ -1,7 +1,7 @@
 package com.sifontes.Qmanagerv2.service;
 
 import com.sifontes.Qmanagerv2.configuration.EntityConverter;
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.utils.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.PartidoDto;
 import com.sifontes.Qmanagerv2.model.Partido;
 import com.sifontes.Qmanagerv2.repository.PartidoRepository;

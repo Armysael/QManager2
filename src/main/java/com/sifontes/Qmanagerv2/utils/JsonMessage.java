@@ -1,4 +1,4 @@
-package com.sifontes.Qmanagerv2.dto;
+package com.sifontes.Qmanagerv2.utils;
 
 import java.io.Serializable;
 

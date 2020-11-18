@@ -1,11 +1,9 @@
 package com.sifontes.Qmanagerv2.service;
 
 import com.sifontes.Qmanagerv2.configuration.EntityConverter;
-import com.sifontes.Qmanagerv2.dto.InfoQuinielaPartidoDto;
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.utils.JsonMessage;
 import com.sifontes.Qmanagerv2.dto.QuinielaDTO;
 import com.sifontes.Qmanagerv2.model.Quiniela;
-import com.sifontes.Qmanagerv2.repository.PartidoRepository;
 import com.sifontes.Qmanagerv2.repository.QuinielaRepository;
 import com.sifontes.Qmanagerv2.utils.CustomMessages;
 import com.sifontes.Qmanagerv2.utils.EnumAcciones;

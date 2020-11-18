@@ -1,6 +1,6 @@
 package com.sifontes.Qmanagerv2.service;
 
-import com.sifontes.Qmanagerv2.dto.JsonMessage;
+import com.sifontes.Qmanagerv2.utils.JsonMessage;
 
 import java.util.List;
 
